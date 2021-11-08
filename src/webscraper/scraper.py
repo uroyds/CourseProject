@@ -6,8 +6,6 @@ import time
 import json
 
 
-import requests
-
 from selenium import webdriver 
 from selenium.webdriver.chrome.options import Options
 
@@ -44,24 +42,8 @@ def get_cauth():
 
     return auth_cookie
 
-# test using resquests
-def test():
-
-    session =  start_coursera_session(get_cauth())
-
-    url = "https://www.coursera.org/learn/text-retrieval/lecture/rLpwp/lesson-1-1-natural-language-content-analysis"
-    request = session.get(url)
-
-    with open("base_test.html", 'w') as base:
-        base.write(request.text)
-    
-    soup = BeautifulSoup(request.text, "html.parser")
-
-    data = soup.find_all('div', {"class" : "phrases"})
-    print(data)
-
 # test using selenium
-def test2():
+def test():
     options = Options()
     options.headless = True
     
