@@ -28,7 +28,7 @@ def test():
 
     session = Coursera(cauth)
 
-    session.download_lecture('text-retrieval', 'lesson-1-1-natural-language-content-analysis', 'rLpwp')
+    session.download_lecture('text-retrieval', 'lesson-1-1-natural-language-content-analysis', 'rLpwp', "../../data")
 
 if __name__ == '__main__':
     test()
