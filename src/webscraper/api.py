@@ -33,20 +33,21 @@ class Coursera:
         pass
 
     # downloads a lecture given its class na
-    def download_lecture(self, class_name, lecture_name, lecture_id, download_directory):
+    def download_lecture(self, class_name, lecture_name, lecture_id, download_directory = '.'):
         
         # construct lecture url
         lecture_url = f'https://coursera.org/learn/{class_name}/lecture/{lecture_id}/{lecture_name}'
 
 
-        soup = get_lecture(lecture_url)
+        soup = self.get_lecture(lecture_url)
 
-        video_link, lecture_timestamp, lecture_data = parse_lecture(soup)
-
+        video_link, lecture_timestamp, lecture_data = self.parse_lecture(soup)
 
         # constructe lecture path
-        download_path = f"{download_directory}/{class_name}/{lecture_name}.txt"
+        #download_path = f"{download_directory}/{class_name}/{lecture_name}.txt"
         
+        download_path = f"{lecture_name}.txt"
+
         # write downloaded to file
         with open(download_path,"w") as f:
             # video_link at the start of file?
@@ -56,9 +57,9 @@ class Coursera:
 
     
     def get_lecture(self, lecture_url):
-        driver.get(url)
+        self.driver.get(lecture_url)
         time.sleep(5) # give it some time
-        res_html = driver.execute_script('return document.body.innerHTML')
+        res_html = self.driver.execute_script('return document.body.innerHTML')
 
         soup = BeautifulSoup(res_html,'html.parser') #beautiful soup object to be used for parsing html content
 
@@ -67,7 +68,7 @@ class Coursera:
 
 # parses lecture webpage for information
 
-    def parse_lecture(self, lecture_soup):
+    def parse_lecture(self, soup):
         
         video_link = soup.find('video').get("src")
 
