@@ -1,39 +1,7 @@
-from bs4 import BeautifulSoup
-
-import re 
-import urllib
-import time
-import json
-
-
 from selenium import webdriver 
 from selenium.webdriver.chrome.options import Options
 
-
-#uses webdriver object to execute javascript code and get dynamically loaded webcontent
-def get_js_soup(url,driver):
-    driver.get(url)
-    time.sleep(5) # give it some time
-    res_html = driver.execute_script('return document.body.innerHTML')
-    with open("base_test.html", 'w') as base:
-        base.write(res_html)
-
-    soup = BeautifulSoup(res_html,'html.parser') #beautiful soup object to be used for parsing html content
-    return soup
-
-def remove_script(soup):
-    for script in soup(["script", "style"]):
-        script.decompose()
-    return soup
-
-# basic webscraper that retrieves data from coursera using the
-
-# set session with coursera
-def start_coursera_session(auth_cookie):
-    session = requests.Session()
-
-    session.cookies.set('CAUTH', auth_cookie)
-    return session
+from api import Coursera
 
 
 def get_cauth():
@@ -42,26 +10,25 @@ def get_cauth():
 
     return auth_cookie
 
-# test using selenium
-def test():
-    options = Options()
-    options.headless = True
-    
-    
-    # initialize chrome driver
-    cauth = get_cauth()
-    driver = webdriver.Chrome('./chromedriver',options=options)
-    driver.get("https://www.coursera.org")
-    driver.add_cookie({"name": "CAUTH", "value": cauth})
 
-    url = "https://www.coursera.org/learn/text-retrieval/lecture/rLpwp/lesson-1-1-natural-language-content-analysis"
-    
-    soup = get_js_soup(url, driver)
-    data = soup.find_all('div', {"class" : "phrases"})
-    print(data) 
 
 def main():
-    pass
+    
+    cauth = get_cauth()
+
+    session = Coursera(cauth)
+
+    session.download_class("text-retrieval", ".")
+
+
+# downloads 1 lecture
+def test():
+
+    cauth = get_cauth()
+
+    session = Coursera(cauth)
+
+    session.download_lecture
 
 if __name__ == '__main__':
-    test2()
+    test()
