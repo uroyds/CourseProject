@@ -68,15 +68,27 @@ class Coursera:
 
     # downloads a lecture given its class na
     #def download_lecture(self, url)
-    def download_lecture(self, class_name, lecture_name, lecture_id):
+    def download_lecture(self, lecture_url):
     
         # construct lecture url
-        lecture_url = f'https://coursera.org/learn/{class_name}/lecture/{lecture_id}/{lecture_name}'
+        url = parse.urlparse(lecture_url)
 
+        class_name = ""
+        lecture_name = ""
+
+        if re.match("\/learn\/.+\/lecture\/.+", url.path):
+            url_path_directory = url.path.strip('/').split('/')
+            class_name = url_path_directory[1]
+            lecture_name = url_path_directory[-1]
+        else:
+            print("Invalid lecture URL")
+            return
 
         soup = self.get_html_soup(lecture_url, 5)
 
         video_link, lecture_timestamp, lecture_data = self.parse_lecture(soup)
+
+
 
         
         download_directory = os.path.join(self.download_path, class_name)
