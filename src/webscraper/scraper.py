@@ -16,9 +16,9 @@ def main():
     
     cauth = get_cauth()
 
-    session = Coursera(cauth)
+    session = Coursera(cauth, "../../data")
 
-    session.download_class("text-retrieval", ".")
+    session.download_class("cs-410")
 
 
 # downloads 1 lecture
@@ -26,9 +26,10 @@ def test():
 
     cauth = get_cauth()
 
-    session = Coursera(cauth)
+    session = Coursera(cauth, "../../data")
 
-    session.download_lecture('text-retrieval', 'lesson-1-1-natural-language-content-analysis', 'rLpwp', "../../data")
+    session.download_lecture('text-retrieval', 'lesson-1-1-natural-language-content-analysis', 'rLpwp')
 
 if __name__ == '__main__':
     test()
+    #main()
