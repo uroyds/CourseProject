@@ -31,5 +31,4 @@ def test():
     session.download_lecture('https://www.coursera.org/learn/text-retrieval/lecture/rLpwp/lesson-1-1-natural-language-content-analysis')
 
 if __name__ == '__main__':
-    #test()
-    test()
+    main()

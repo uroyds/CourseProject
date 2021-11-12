@@ -63,7 +63,7 @@ class Coursera:
 
         for lecture in lectures:
             print(lecture)
-            #self.download_lecture(lecture)
+            self.download_lecture(lecture)
 
 
     # downloads a lecture given its class na
