@@ -31,5 +31,5 @@ def test():
     session.download_lecture('text-retrieval', 'lesson-1-1-natural-language-content-analysis', 'rLpwp')
 
 if __name__ == '__main__':
-    test()
-    #main()
+    #test()
+    main()

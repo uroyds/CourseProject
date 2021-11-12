@@ -46,17 +46,24 @@ class Coursera:
         # check for rc-WeekCollectionNavigationItem to get weeks?
         home_soup = self.get_html_soup(class_home_page, 5)
 
-        week_pages = self.parse_home_page(home_soup)
+        weeks = self.parse_home_page(home_soup)
 
 
-        for week_url in week_pages:
-            print(week_url)
-            self.handle_link(week_url)
-        
+        for week in weeks:
+            #print(week_url)
+            self.download_week(week)
             # for each week get lecture 
                 # for each lecture parse
-        pass
 
+    def download_week(self, week_url):
+        pass
+        week_soup = self.get_html_soup(week_url, 5)
+
+        lectures = self.parse_week_page(week_soup)
+
+        for lecture in lectures:
+            print(lecture)
+            #self.download_lecture(lecture)
 
 
     # downloads a lecture given its class na
@@ -97,8 +104,6 @@ class Coursera:
 
 
             
-
-
     # given a link pass it to other function
     def handle_link(self, link):
         
@@ -124,13 +129,31 @@ class Coursera:
 
     # look for links to the weeks
     def parse_home_page(self, soup):
-        week_links = soup.find_all('a', {"data-click-key" : "open_course_home.menu.click.nav_week"})
-        return [w.get('href') for w in week_links]
+        nav_weeks = soup.find_all('a', {"data-click-key" : "open_course_home.menu.click.nav_week"})
+
+        weeks_url = []
+
+        for w in nav_weeks:
+            url = parse.urljoin("https://www.coursera.org", w.get('href'))
+            weeks_url.append(url)
+
+        return weeks_url
 
 
     # look for links to the lecture in each week
     def parse_week_page(self, soup):
-        pass
+        
+        links = soup.find_all('a', {'data-click-key' : 'open_course_home.period_page.click.item_link'})
+
+        lecture_urls = []
+        for l in links:
+            # filter for lectures
+            path = l.get('href')
+            if re.match("\/learn\/.+\/lecture\/.+", path):
+                url = parse.urljoin("https://www.coursera.org", path)
+                lecture_urls.append(url)
+
+        return lecture_urls
 
     # parses lecture webpage for information
     def parse_lecture(self, soup):
