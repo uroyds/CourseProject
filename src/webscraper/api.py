@@ -5,11 +5,11 @@ from selenium.webdriver.chrome.options import Options
 import time
 import json
 import os
+from pathlib import Path
+
 from collections import deque
 
 from urllib import parse
-
-from pathlib import Path
 
 import re
 
@@ -31,7 +31,8 @@ class Coursera:
         self.driver.add_cookie({"name": "CAUTH", "value": cauth})
 
         # set download path
-        self.download_path = download_path
+        self.download_directory = download_path
+        self.download_path = self.download_directory
 
     # downloads all the lectures for a class
     def download_class(self, class_name):
@@ -47,8 +48,18 @@ class Coursera:
         home_soup = self.get_html_soup(class_home_page, 5)
 
         weeks = self.parse_home_page(home_soup)
-
-
+        
+        if len(weeks) > 0:
+            try:
+                self.download_path = os.path.join(self.download_directory, class_name)
+                os.makedirs(self.download_path, exist_ok=True)
+            except FileExistsError:
+                print("Directory for {} already exists".format(class_name))
+            # directory already exists
+        else:
+            print("Error: Unable to find lectures for this class")
+            return
+        pass
         for week in weeks:
             #print(week_url)
             self.download_week(week)
@@ -56,7 +67,6 @@ class Coursera:
                 # for each lecture parse
 
     def download_week(self, week_url):
-        pass
         week_soup = self.get_html_soup(week_url, 5)
 
         lectures = self.parse_week_page(week_soup)
@@ -87,13 +97,7 @@ class Coursera:
         soup = self.get_html_soup(lecture_url, 5)
 
         video_link, lecture_timestamp, lecture_data = self.parse_lecture(soup)
-
-
-
         
-        download_directory = os.path.join(self.download_path, class_name)
-        download_path = os.path.join(download_directory, lecture_name + ".txt")
-
         download_path = os.path.join(self.download_path, lecture_name + ".txt")
         # write downloaded to file
         with open(download_path,"w") as f:
@@ -117,8 +121,9 @@ class Coursera:
 
             
     # given a link pass it to other function
+    # unused function
     def handle_link(self, link):
-        
+        pass
         lecture_re = re.compile
         some_url = parse.urlparse(link)
         print(some_url)
