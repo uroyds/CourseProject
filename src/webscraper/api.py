@@ -102,7 +102,7 @@ class Coursera:
         # write downloaded to file
         with open(download_path,"w") as f:
             # video_link at the start of file?
-            #f.write(video_link + '\n')
+            f.write(video_link + '\n')
             for j in range(len(lecture_data)):
                 f.write(lecture_timestamp[j] + " : " + lecture_data[j] + "\n")
 
