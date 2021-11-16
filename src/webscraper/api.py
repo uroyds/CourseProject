@@ -40,7 +40,7 @@ class Coursera:
 
         class_home_page = f'https://www.coursera.org/learn/{class_name}/home/welcome'
 
-        #print(class_home_page)
+        print("fetching ",class_home_page)
 
         #crawl_stack = deque()
         #crawl_stack.append(class_home_page)
